@@ -65,7 +65,7 @@ namespace ScriptureJournal
                     break;
                 default:
                     bookQuery = bookQuery.OrderBy(s => s.Book);
-                    break;+
+                    break;
             }
             Book = new SelectList(await bookListQuery.Distinct().ToListAsync());
             Entry = await bookQuery.AsNoTracking().ToListAsync();
