@@ -35,7 +35,11 @@ namespace ScriptureJournal
             BookSort = String.IsNullOrEmpty(sortOrder) ? "Book" : "";
             DateAddedSort = sortOrder == "DAdded_Asc_Sort" ? "DAdded_Desc_Sort" : "DAdded_Asc_Sort";
 
-            CurrentFilter = searchString;
+            IQueryable<string> bookListQuery = from e in _context.Entry
+                                               orderby e.Book
+                                               select e.Book;
+
+           CurrentFilter = searchString;
 
             IQueryable<Entry> bookQuery = from e in _context.Entry select e;
 
@@ -61,8 +65,9 @@ namespace ScriptureJournal
                     break;
                 default:
                     bookQuery = bookQuery.OrderBy(s => s.Book);
-                    break;
+                    break;+
             }
+            Book = new SelectList(await bookListQuery.Distinct().ToListAsync());
             Entry = await bookQuery.AsNoTracking().ToListAsync();
         }
     }
